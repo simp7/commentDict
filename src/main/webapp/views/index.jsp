@@ -10,24 +10,23 @@
 <%
     if (user.getId() != null) {
 %>
-<label>${user.id}</label><button type="button"/>로그아웃</button>
+<label>${user.id}</label>
+<button type="button" onclick="location.href=''">로그아웃</button>
 <%
     } else {
 %>
     <form action="index.jsp" style="display: flex; align-items: center">
         <div style="display: flex; flex-direction: column; margin-right: 20px">
-            <label>ID</label>
-            <input type="text" name="id" />
+            <label>ID<input type="text" name="id" /></label>
         </div>
         <div style="display: flex; flex-direction: column; margin-right: 20px">
-        <label>Password</label>
-        <input type="password" name="passwd" />
+        <label>Password<input type="password" name="passwd"></label>
         </div>
         <div style="margin-right: 10px">
         <input type="submit" value="로그인" />
         </div>
         <div >
-            <input type="submit" value="회원가입" />
+            <input type="button" value="회원가입" />
         </div>
     </form>
 <%}%>

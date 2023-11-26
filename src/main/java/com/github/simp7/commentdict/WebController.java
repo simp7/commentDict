@@ -12,8 +12,9 @@ public class WebController {
         return "index";
     }
     @GetMapping("/keyword/{keyword}")
-    public String keyword(@PathVariable String keyword, @SessionAttribute(name = "uid", required = false) Model m) {
+    public String keyword(@PathVariable String keyword, Model m, @SessionAttribute(name="uid", required = false) int uid) {
         m.addAttribute("keyword", keyword);
+        m.addAttribute("uid", uid);
         return "keyword";
     }
 
