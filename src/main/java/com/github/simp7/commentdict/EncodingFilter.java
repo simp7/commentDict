@@ -12,9 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 
 @WebFilter("*")
 public class EncodingFilter implements Filter {
-    /**
-     * Default constructor.
-     */
     public EncodingFilter() {
     }
 
@@ -30,10 +27,6 @@ public class EncodingFilter implements Filter {
         chain.doFilter(request, response);
     }
 
-    /**
-     * @see Filter#init(FilterConfig)
-     */
     public void init(FilterConfig fConfig) throws ServletException {
-        // TODO Auto-generated method stub
     }
 }
