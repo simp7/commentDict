@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
+@SessionAttributes("uid")
 @RequestMapping("/")
 public class WebController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -32,6 +33,7 @@ public class WebController {
             m.addAttribute("comments", comments);
         }catch (Exception e){
             logger.info("댓글 가져오는 중 문제 발생");
+            logger.error(e.getMessage());
         }
         return "keyword";
     }

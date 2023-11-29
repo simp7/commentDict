@@ -1,5 +1,7 @@
 package com.github.simp7.commentdict;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
@@ -10,23 +12,26 @@ import java.util.List;
 public class DAO {
     final String JDBC_DRIVER = "org.h2.Driver";
     final String JDBC_URL = "jdbc:h2:tcp://localhost/~/db/commentDict";
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public Connection open() {
         Connection conn = null;
         try {
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(JDBC_URL,"admin","pass1234");
+            logger.info(conn.toString());
         } catch (Exception e) {
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
         return conn;
     }
 
-    public List<Comment> getComments(int uid, String keyword) throws Exception {
+    public List<Comment> getComments(Integer uid, String keyword) throws Exception {
         Connection conn = open();
         List<Comment> comments = new ArrayList<>();
 
-        String sql = "select id, owner_uid, content, popularity as cdate from comment where keyword=?";
+        String sql = "select id, owner_uid, content, popularity from comments where keyword=?";
         PreparedStatement pstmt = conn.prepareStatement(sql);
 
         try(conn; pstmt) {
@@ -34,9 +39,14 @@ public class DAO {
             ResultSet rs = pstmt.executeQuery();
             while(rs.next()) {
                 Comment c = new Comment();
+                final boolean  isMine = uid != null && rs.getInt("owner_uid") == uid;
                 c.setContent(rs.getString("content"));
-                c.setMine(rs.getInt("owner_uid") == uid);
+                c.setMine(isMine);
                 c.setPopularity(rs.getInt("popularity"));
+                if (isMine) {
+                    comments.add(0, c);
+                    continue;
+                }
                 comments.add(c);
             }
             return comments;
