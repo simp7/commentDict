@@ -32,7 +32,7 @@ public class WebController {
             List<Comment> comments = dao.getComments(uid, keyword);
             m.addAttribute("comments", comments);
         }catch (Exception e){
-            logger.info("댓글 가져오는 중 문제 발생");
+            logger.info("댓글 로드 중 문제 발생");
             logger.error(e.getMessage());
         }
         return "keyword";
@@ -41,5 +41,16 @@ public class WebController {
     @GetMapping("/register")
     public String register() {
         return "register";
+    }
+
+    @PostMapping("/comment/add/{keyword}")
+    public String addKeyword(@PathVariable String keyword, @ModelAttribute Comment comment, @SessionAttribute(name="uid", required = false) Integer uid){
+        try {
+            dao.addComment(keyword, comment, uid);
+        } catch (Exception e) {
+            logger.info("댓글 등록 중 문제 발생");
+            logger.error(e.getMessage());
+        }
+        return "redirect:/keyword";
     }
 }

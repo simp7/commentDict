@@ -53,16 +53,16 @@ public class DAO {
         }
     }
 
-    public void addComment(String keyword, Comment c) throws Exception {
+    public void addComment(String keyword, Comment c, int uid) throws Exception {
         Connection conn = open();
 
-        String sql = "insert into comments(keyword,popularity,content,date) values(?,?,?,CURRENT_TIMESTAMP())";
+        String sql = "insert into comments(keyword,popularity,content,owner_uid) values(?,0,?,?)";
         PreparedStatement pstmt = conn.prepareStatement(sql);
 
         try(conn; pstmt) {
-            pstmt.setString(1, c.getContent());
-            pstmt.setInt(2, 0);
-            pstmt.setString(3, c.getContent());
+            pstmt.setString(1, keyword);
+            pstmt.setString(2, c.getContent());
+            pstmt.setInt(3, uid);
             pstmt.executeUpdate();
         }
     }
