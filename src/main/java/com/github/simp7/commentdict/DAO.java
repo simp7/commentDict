@@ -27,18 +27,18 @@ public class DAO {
         return conn;
     }
 
-    public List<Comment> getComments(Integer uid, String keyword) throws Exception {
+    public List<Comment> getComments(String keyword, Integer uid) throws Exception {
         Connection conn = open();
         List<Comment> comments = new ArrayList<>();
 
-        String sql = "select id, owner_uid, content, popularity from comments where keyword=?";
+        String sql = "SELECT id, owner_uid, content, popularity FROM comments WHERE keyword=? ORDER BY popularity DESC";
         PreparedStatement pstmt = conn.prepareStatement(sql);
 
         try(conn; pstmt) {
             pstmt.setString(1, keyword);
             ResultSet rs = pstmt.executeQuery();
             while(rs.next()) {
-                Comment c = new Comment();
+                Comment c = new Comment(rs.getInt("id"));
                 final boolean  isMine = uid != null && rs.getInt("owner_uid") == uid;
                 c.setContent(rs.getString("content"));
                 c.setMine(isMine);
@@ -56,7 +56,7 @@ public class DAO {
     public void addComment(String keyword, Comment c, int uid) throws Exception {
         Connection conn = open();
 
-        String sql = "insert into comments(keyword,popularity,content,owner_uid) values(?,0,?,?)";
+        String sql = "INSERT INTO comments(keyword,popularity,content,owner_uid) VALUES (?,0,?,?)";
         PreparedStatement pstmt = conn.prepareStatement(sql);
 
         try(conn; pstmt) {
@@ -67,18 +67,51 @@ public class DAO {
         }
     }
 
-    public void delComment(int aid) throws SQLException {
+    public void deleteComment(int id) throws SQLException {
         Connection conn = open();
 
-        String sql = "delete from news where id=? and ";
+        String sql = "DELETE FROM comments WHERE id=? ";
         PreparedStatement pstmt = conn.prepareStatement(sql);
 
         try(conn; pstmt) {
-            pstmt.setInt(1, aid);
+            pstmt.setInt(1, id);
             // 삭제된 뉴스 기사가 없을 경우
             if(pstmt.executeUpdate() == 0) {
                 throw new SQLException("DB 에러");
             }
         }
     }
+
+    public void likeComment(int id, Integer uid) throws Exception {
+        Connection conn = open();
+
+        String sql = "BEGIN; " +
+                "SET TRANSACTION ISOLATION LEVEL SERIALIZABLE; " +
+                "UPDATE comments SET popularity = popularity + 1 WHERE id=?; " +
+                "COMMIT;";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+
+        try (conn; pstmt) {
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+            logger.info(id + ": 성공적으로 추천했습니다.");
+        }
+    }
+
+    public void dislikeComment(int id, Integer uid) throws Exception {
+        Connection conn = open();
+
+        String sql = "BEGIN;" +
+                " SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;" +
+                "UPDATE comments SET popularity = popularity - 1 WHERE id=?;" +
+                "COMMIT;";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+
+        try (conn; pstmt) {
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+            logger.info(id + ": 성공적으로 비추천했습니다.");
+        }
+    }
+
 }

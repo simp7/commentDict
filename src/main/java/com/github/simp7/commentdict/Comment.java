@@ -6,6 +6,9 @@ public class Comment {
     private String content;
     private boolean isMine;
 
+    Comment(int id) {
+        this.id = id;
+    }
     public int getId() {
         return id;
     }
