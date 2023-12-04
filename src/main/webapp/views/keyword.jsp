@@ -12,42 +12,54 @@
 <div class="list-group">
     <c:forEach var="comment" items="${comments}" varStatus="status">
         <c:choose>
-
-        <c:when test="${status.index == 0} && ${sessionScope.uid != null}">
-            <c:choose>
-                <c:when test="${comment.isMine}">
-                    <div class="comment">
-                        ${comment.content}
-                        <div>
-                            <a href="/keyword/${keyword}/delete/${comment.id}">삭제</a>
+            <c:when test="${status.index == 0 && sessionScope.user.uid != null}">
+                <c:choose>
+                    <c:when test="${comment.isMine}">
+                        <div class="comment">
+                            ${comment.content}
+                            <div>
+                                추천도: ${comment.popularity}
+                                <a href="/keyword/${keyword}/delete/${comment.id}">삭제</a>
+                            </div>
+                            <hr>
                         </div>
-                        <hr>
+                    </c:when>
+                    <c:otherwise>
+                        <form method="post" style="display: flex; flex-direction: column" action="/keyword/${keyword}/add">
+                            <textarea style="align-self: stretch; resize: none" name="content" rows="4" ></textarea>
+                            <div>
+                                <input type="submit" value="등록">
+                            </div>
+                            <hr>
+                        </form>
+                        <div class="likeButtonContainer">
+                                ${comment.content}
+                            <div>
+                                추천도: ${comment.popularity}
+                                <div>
+                                    <a href="/keyword/${keyword}/like/${comment.id}">추천</a>
+                                    <a href="/keyword/${keyword}/dislike/${comment.id}">비추천</a>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+            </c:when>
+
+            <c:otherwise>
+            <div class="likeButtonContainer">
+                ${comment.content}
+                <div>
+                    추천도: ${comment.popularity}
+                    <div>
+                        <a href="/keyword/${keyword}/like/${comment.id}">추천</a>
+                        <a href="/keyword/${keyword}/dislike/${comment.id}">비추천</a>
                     </div>
-                </c:when>
-                <c:otherwise>
-                    <form style="display: flex; flex-direction: column" action="/keyword/${keyword}/add">
-                        <textarea style="align-self: stretch; resize: none" name="content" rows="4" ></textarea>
-                        <div>
-                            <input type="submit" value="등록">
-                        </div>
-                        <hr>
-                    </form>
-                </c:otherwise>
-            </c:choose>
-        </c:when>
-
-        <c:otherwise>
-        <div class="likeButtonContainer">
-            ${comment.content}
-            id: ${comment.id}
-            pop: ${comment.popularity}
-            <div>
-                <a href="/keyword/${keyword}/like/${comment.id}">추천</a>
-                <a href="/keyword/${keyword}/dislike/${comment.id}">비추천</a>
+                </div>
+                <hr>
             </div>
-            <hr>
-        </div>
-        </c:otherwise>
+            </c:otherwise>
 
         </c:choose>
     </c:forEach>

@@ -56,13 +56,13 @@ public class WebController {
             logger.info("회원가입 중 문제 발생");
             logger.error(e.getMessage());
         }
-        return "register";
+        return "index";
     }
 
     @PostMapping("/login")
     public String login(@RequestParam String id, @RequestParam String passwd, HttpServletRequest request) {
         try {
-            logger.info("로그인");
+            logger.info("로그인 시도");
             User user = dao.getUser(id, passwd);
             if (user == null) {
                 throw new Exception("로그인 정보가 일치하지 않습니다.");

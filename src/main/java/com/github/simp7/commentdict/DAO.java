@@ -12,7 +12,7 @@ import java.util.List;
 @Component
 public class DAO {
     final String JDBC_DRIVER = "org.h2.Driver";
-    final String JDBC_URL = "jdbc:h2:tcp://localhost/~/db/commentDict";
+    final String JDBC_URL = "jdbc:h2:tcp://localhost/~/db/commentDict;mode=mysql";
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public Connection open() {
@@ -31,12 +31,13 @@ public class DAO {
     public void addUser(String id, String passwd) throws Exception {
         Connection conn = open();
 
-        String sql = "INSERT INTO comments(id, passwd) VALUES (?, ?)";
+        String sql = "INSERT INTO users(id, passwd) VALUES (?, ?)";
         PreparedStatement pstmt = conn.prepareStatement(sql);
 
         try (conn; pstmt) {
             pstmt.setString(1, id);
             pstmt.setString(2, passwd);
+            pstmt.executeUpdate();
         }
     }
 
@@ -49,7 +50,6 @@ public class DAO {
         try(conn; pstmt) {
             pstmt.setString(1, id);
             pstmt.setString(2, passwd);
-            logger.info("로그인 시도 - id: " + id +", passwd:" + passwd);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 User user = new User();
@@ -67,14 +67,15 @@ public class DAO {
         Connection conn = open();
         List<Comment> comments = new ArrayList<>();
 
-        String sql = "SELECT id, owner_uid, content, popularity FROM comments WHERE keyword=? ORDER BY popularity ASC";
+        String sql = "SELECT id, owner_uid, content, popularity FROM comments WHERE keyword=? ORDER BY popularity DESC";
         PreparedStatement pstmt = conn.prepareStatement(sql);
 
         try(conn; pstmt) {
             pstmt.setString(1, keyword);
             ResultSet rs = pstmt.executeQuery();
             while(rs.next()) {
-                Comment c = new Comment(rs.getInt("id"));
+                Comment c = new Comment();
+                c.setId(rs.getInt("id"));
                 final boolean  isMine = uid != null && rs.getInt("owner_uid") == uid;
                 c.setContent(rs.getString("content"));
                 c.setMine(isMine);
