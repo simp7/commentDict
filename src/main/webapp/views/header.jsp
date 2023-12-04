@@ -1,15 +1,16 @@
-
+<%@ page import="com.github.simp7.commentdict.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<jsp:useBean id="user" class="com.github.simp7.commentdict.User" scope="session" />
 <%
-    if (user.getId() != null) {
+    if (session.getAttribute("user") != null) {
 %>
-<label>${user.id}</label>
-<button type="button" onclick="location.href=''">로그아웃</button>
+<form method="POST" action="/logout">
+<label>${sessionScope.user.id}</label>
+<button type="submit">로그아웃</button>
+</form>
 <%
 } else {
 %>
-<form action="/" style="display: flex; align-items: center">
+<form method="post" action="/login" style="display: flex; align-items: center">
     <div style="display: flex; flex-direction: column; margin-right: 20px">
         <label>ID<input type="text" name="id" /></label>
     </div>

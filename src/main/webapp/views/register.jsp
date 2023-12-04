@@ -1,15 +1,5 @@
 <%@ page language="java" contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%
-    String id = request.getParameter("id");
-    String passwd = request.getParameter("passwd");
-    String confirm = request.getParameter("confirm_passwd");
-    if (id != null && passwd != null && passwd.equals(confirm)) {
-%>
-    <jsp:forward page="registering.jsp" />
-<%
-    }
-%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,7 +9,7 @@
 <body>
     <h2>회원 가입</h2>
     <hr />
-    <form >
+    <form method="POST" action="/registering">
         <label>ID
             <input type="text" name="id" />
         </label>
