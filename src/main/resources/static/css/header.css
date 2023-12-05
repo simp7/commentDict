@@ -1,0 +1,23 @@
+button {
+    width: 5rem;
+    height: 2.5rem;
+}
+
+#login-bar {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: row;
+    padding-right: 50px;
+    justify-content: flex-end;
+}
+
+.login-item {
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+}
+
+#login-user {
+    font-size: 2rem;
+    padding-right: 20px;
+}

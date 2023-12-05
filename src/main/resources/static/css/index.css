@@ -1,0 +1,14 @@
+#search-form {
+    display: flex;
+    align-items: center;
+    margin: 150px 140px;
+}
+
+#search-button {
+    width: 5rem;
+    margin-left: 40px;
+}
+
+#search-input {
+    flex: 1;
+}

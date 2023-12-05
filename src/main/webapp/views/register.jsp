@@ -5,21 +5,28 @@
 <head>
     <meta charset="UTF-8">
     <title>회원 가입</title>
+    <link rel="stylesheet" href="/css/general.css">
+    <link rel="stylesheet" href="/css/register.css">
 </head>
 <body>
-    <h2>회원 가입</h2>
-    <hr />
-    <form method="POST" action="/registering">
-        <label>ID
-            <input type="text" name="id" />
-        </label>
-        <label>Password
-            <input type="password" name="passwd" />
-        </label>
-        <label>Password(위와 동일하게 입력)
-            <input type="password" name="confirm_passwd" />
-        </label>
-        <input type="submit" value="회원 가입" />
-    </form>
+    <div id="container">
+        <h2>회원 가입</h2>
+        <hr />
+        <form method="POST" action="/registering">
+            <div class="register-item">
+                <label>ID</label>
+                <input id="register-input-id" type="text" name="id" />
+            </div>
+            <div class="register-item">
+                <label>Password</label>
+                <input type="password" name="passwd" />
+            </div>
+            <div class="register-item">
+                <label>Password(위와 동일하게 입력)</label>
+                <input type="password" name="confirm_passwd" />
+            </div>
+            <button type="submit">회원가입</button>
+        </form>
+    </div>
 </body>
 </html>

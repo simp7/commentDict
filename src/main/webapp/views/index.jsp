@@ -13,12 +13,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Comment Dictionary</title>
+    <link rel="stylesheet" href="/css/general.css">
+    <link rel="stylesheet" href="/css/index.css">
 </head>
 <body>
 <jsp:include page="header.jsp" />
 <form id="search-form" action="javascript:submitSearch()" >
     <input type="text" id="search-input" onkeyup="searchTextChanged()" maxlength="100" name="keyword"/>
-    <input type="submit" id="search-button" value="검색" disabled/>
+    <button type="submit" id="search-button" disabled>검색</button>
 </form>
 </body>
 </html>

@@ -3,6 +3,7 @@
 <html>
 <head>
     <title>Title</title>
+    <link rel="stylesheet" href="/css/general.css">
 </head>
 <meta charset="UTF-8">
 <body>
@@ -28,7 +29,7 @@
                         <form method="post" style="display: flex; flex-direction: column" action="/keyword/${keyword}/add">
                             <textarea style="align-self: stretch; resize: none" name="content" rows="4" ></textarea>
                             <div>
-                                <input type="submit" value="등록">
+                                <button type="submit">등록</button>
                             </div>
                             <hr>
                         </form>
