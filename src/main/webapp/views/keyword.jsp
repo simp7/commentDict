@@ -4,13 +4,14 @@
 <head>
     <title>Title</title>
     <link rel="stylesheet" href="/css/general.css">
+    <link rel="stylesheet" href="/css/keyword.css">
 </head>
 <meta charset="UTF-8">
 <body>
 <jsp:include page="header.jsp" />
 <h2>${keyword}</h2>
 <hr>
-<div class="list-group">
+<div id="list-group">
     <c:forEach var="comment" items="${comments}" varStatus="status">
         <c:choose>
             <c:when test="${status.index == 0 && sessionScope.user.uid != null}">
@@ -18,52 +19,68 @@
                     <c:when test="${comment.isMine}">
                         <div class="comment">
                             ${comment.content}
-                            <div>
+                            <div class="button-container">
                                 추천도: ${comment.popularity}
-                                <a href="/keyword/${keyword}/delete/${comment.id}">삭제</a>
+                                <form action="/keyword/${keyword}/delete/${comment.id}">
+                                    <button type="submit">삭제</button>
+                                </form>
                             </div>
-                            <hr>
                         </div>
                     </c:when>
                     <c:otherwise>
-                        <form method="post" style="display: flex; flex-direction: column" action="/keyword/${keyword}/add">
-                            <textarea style="align-self: stretch; resize: none" name="content" rows="4" ></textarea>
-                            <div>
-                                <button type="submit">등록</button>
-                            </div>
-                            <hr>
-                        </form>
-                        <div class="likeButtonContainer">
-                                ${comment.content}
-                            <div>
-                                추천도: ${comment.popularity}
-                                <div>
-                                    <a href="/keyword/${keyword}/like/${comment.id}">추천</a>
-                                    <a href="/keyword/${keyword}/dislike/${comment.id}">비추천</a>
+                        <div class="comment">
+                            <form method="post" style="display: flex; flex-direction: column" action="/keyword/${keyword}/add">
+                                <textarea  name="content" rows="5" oninput='this.style.height="auto"; this.style.height=this.scrollHeight + 5 + "px"'></textarea>
+                                <div class="button-container">
+                                    <button type="submit">등록</button>
                                 </div>
+                            </form>
+                        </div>
+                        <hr>
+                        <div class="comment">
+                            ${comment.content}
+                            <div class="button-container">
+                                추천도: ${comment.popularity}
+                                <form action="/keyword/${keyword}/like/${comment.id}">
+                                    <button type="submit">추천</button>
+                                </form>
+                                <form action="/keyword/${keyword}/dislike/${comment.id}">
+                                    <button type="submit">비추천</button>
+                                </form>
                             </div>
-                            <hr>
                         </div>
                     </c:otherwise>
                 </c:choose>
             </c:when>
 
             <c:otherwise>
-            <div class="likeButtonContainer">
+            <div class="comment">
                 ${comment.content}
-                <div>
+                <div class="button-container">
                     추천도: ${comment.popularity}
-                    <div>
-                        <a href="/keyword/${keyword}/like/${comment.id}">추천</a>
-                        <a href="/keyword/${keyword}/dislike/${comment.id}">비추천</a>
-                    </div>
+                    <form action="/keyword/${keyword}/like/${comment.id}">
+                        <button type="submit">추천</button>
+                    </form>
+                    <form action="/keyword/${keyword}/dislike/${comment.id}">
+                        <button type="submit">비추천</button>
+                    </form>
                 </div>
-                <hr>
             </div>
             </c:otherwise>
 
         </c:choose>
+        <hr>
     </c:forEach>
+    <c:if test="${comments.size() == 0}">
+        <div class="comment">
+            <form method="post" style="display: flex; flex-direction: column" action="/keyword/${keyword}/add">
+                <textarea  name="content" rows="5" oninput='this.style.height="auto"; this.style.height=this.scrollHeight + 5 + "px"'></textarea>
+                <div class="button-container">
+                    <button type="submit">등록</button>
+                </div>
+            </form>
+        </div>
+    </c:if>
 </div>
 </body>
 </html>

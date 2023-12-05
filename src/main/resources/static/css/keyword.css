@@ -1,0 +1,20 @@
+form {
+    margin: 0 0 0 10px;
+}
+
+.comment {
+    padding: 30px 10px 40px;
+}
+
+.button-container {
+    align-self: flex-end;
+    margin-top: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+textarea {
+    resize: none;
+}

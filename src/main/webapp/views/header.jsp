@@ -12,7 +12,7 @@
 <%
 } else {
 %>
-<form method="post" action="/login" id="login-bar">
+<form method="post" action="/login" class="login-bar">
     <div class="login-item">
         <label>ID<input type="text" name="id" /></label>
     </div>
