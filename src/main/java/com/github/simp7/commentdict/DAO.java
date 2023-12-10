@@ -118,6 +118,29 @@ public class DAO {
         }
     }
 
+    public List<Integer> getLikesByUser(Integer uid) throws Exception {
+        Connection conn = open();
+        List<Integer> ids = new ArrayList<>();
+
+        if (uid == null) {
+            return ids;
+        }
+
+        String sql = "SELECT id FROM likes WHERE uid=? ";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+
+        try (conn; pstmt) {
+            pstmt.setInt(1, uid);
+            ResultSet rs = pstmt.executeQuery();
+
+            while(rs.next()) {
+                ids.add(rs.getInt("id"));
+            }
+        }
+
+        return ids;
+    }
+
     public void likeComment(int id, Integer uid) throws Exception {
         Connection conn = open();
 
@@ -139,6 +162,7 @@ public class DAO {
 
         String sql = "BEGIN;" +
                 "SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;" +
+                "" +
                 "UPDATE comments SET popularity = popularity - 1 WHERE id=?;" +
                 "COMMIT;";
         PreparedStatement pstmt = conn.prepareStatement(sql);
