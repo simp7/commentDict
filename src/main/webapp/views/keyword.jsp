@@ -14,7 +14,7 @@
 <div id="list-group">
     <c:forEach var="comment" items="${comments}" varStatus="status">
         <c:choose>
-            <c:when test="${status.index == 0 && sessionScope.user.uid != null}">
+            <c:when test="${status.index == 0 && sessionScope.user != null}">
                 <c:choose>
                     <c:when test="${comment.isMine}">
                         <div class="comment">
@@ -41,12 +41,14 @@
                             ${comment.content}
                             <div class="button-container">
                                 추천도: ${comment.popularity}
-                                <form action="/keyword/${keyword}/like/${comment.id}">
-                                    <button type="submit">추천</button>
-                                </form>
-                                <form action="/keyword/${keyword}/dislike/${comment.id}">
-                                    <button type="submit">비추천</button>
-                                </form>
+                                <c:if test="${sessionScope.user != null}">
+                                    <form action="/keyword/${keyword}/like/${comment.id}">
+                                        <button type="submit">추천</button>
+                                    </form>
+                                    <form action="/keyword/${keyword}/dislike/${comment.id}">
+                                        <button type="submit">비추천</button>
+                                    </form>
+                                </c:if>
                             </div>
                         </div>
                     </c:otherwise>
@@ -58,12 +60,14 @@
                 ${comment.content}
                 <div class="button-container">
                     추천도: ${comment.popularity}
-                    <form action="/keyword/${keyword}/like/${comment.id}">
-                        <button type="submit">추천</button>
-                    </form>
-                    <form action="/keyword/${keyword}/dislike/${comment.id}">
-                        <button type="submit">비추천</button>
-                    </form>
+                    <c:if test="${sessionScope.user != null}">
+                        <form action="/keyword/${keyword}/like/${comment.id}">
+                            <button type="submit">추천</button>
+                        </form>
+                        <form action="/keyword/${keyword}/dislike/${comment.id}">
+                            <button type="submit">비추천</button>
+                        </form>
+                    </c:if>
                 </div>
             </div>
             </c:otherwise>

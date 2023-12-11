@@ -6,6 +6,8 @@ public class Comment {
     private String content;
     private boolean isMine;
 
+    private Integer myVote;
+
     public int getId() {
         return id;
     }
@@ -36,5 +38,13 @@ public class Comment {
 
     public void setMine(boolean mine) {
         isMine = mine;
+    }
+
+    public Integer getMyVote() {
+        return myVote;
+    }
+
+    public void setMyVote(Integer myVote) {
+        this.myVote = myVote;
     }
 }
