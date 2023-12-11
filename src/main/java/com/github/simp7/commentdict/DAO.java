@@ -67,11 +67,21 @@ public class DAO {
         Connection conn = open();
         List<Comment> comments = new ArrayList<>();
 
-        String sql = "SELECT id, owner_uid, content, popularity FROM comments WHERE keyword=? ORDER BY popularity DESC";
+        String sql = "SELECT view.id, view.owner_uid, view.keyword, view.content, view.popularity, IFNULL(l.weight, 0) AS myvote FROM (\n" +
+                "SELECT c.id, c.owner_uid, c.keyword, c.content, IFNULL(sum(l.weight), 0) AS popularity FROM comments AS c\n" +
+                "LEFT JOIN likes AS l\n" +
+                "ON l.comment_id = c.id\n" +
+                "GROUP BY c.id\n" +
+                ") view\n" +
+                "LEFT JOIN likes AS l\n" +
+                "ON l.comment_id = view.id AND l.uid=?\n" +
+                "WHERE keyword=?\n" +
+                "ORDER BY popularity DESC";
         PreparedStatement pstmt = conn.prepareStatement(sql);
 
         try(conn; pstmt) {
-            pstmt.setString(1, keyword);
+            pstmt.setInt(1, uid != null ? uid : 0);
+            pstmt.setString(2, keyword);
             ResultSet rs = pstmt.executeQuery();
             while(rs.next()) {
                 Comment c = new Comment();
@@ -84,6 +94,7 @@ public class DAO {
                     comments.add(0, c);
                     continue;
                 }
+                c.setMyVote(rs.getInt("myVote"));
                 comments.add(c);
             }
             return comments;
@@ -141,37 +152,20 @@ public class DAO {
         return ids;
     }
 
-    public void likeComment(int id, Integer uid) throws Exception {
+    public void voteComment(int id, int uid, int weight) throws Exception {
         Connection conn = open();
 
-        String sql = "BEGIN; " +
-                "SET TRANSACTION ISOLATION LEVEL SERIALIZABLE; " +
-                "UPDATE comments SET popularity = popularity + 1 WHERE id=?; " +
-                "COMMIT;";
+        String sql = "INSERT INTO likes(comment_id, uid, weight) VALUES (?, ?, ?)\n" +
+                "ON DUPLICATE KEY UPDATE weight=?";
         PreparedStatement pstmt = conn.prepareStatement(sql);
 
         try (conn; pstmt) {
             pstmt.setInt(1, id);
+            pstmt.setInt(2, uid);
+            pstmt.setInt(3, weight);
+            pstmt.setInt(4, weight);
             pstmt.executeUpdate();
             logger.info(id + ": 성공적으로 추천했습니다.");
         }
     }
-
-    public void dislikeComment(int id, Integer uid) throws Exception {
-        Connection conn = open();
-
-        String sql = "BEGIN;" +
-                "SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;" +
-                "" +
-                "UPDATE comments SET popularity = popularity - 1 WHERE id=?;" +
-                "COMMIT;";
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-
-        try (conn; pstmt) {
-            pstmt.setInt(1, id);
-            pstmt.executeUpdate();
-            logger.info(id + ": 성공적으로 비추천했습니다.");
-        }
-    }
-
 }

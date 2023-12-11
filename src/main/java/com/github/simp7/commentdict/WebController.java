@@ -118,8 +118,10 @@ public class WebController {
     @GetMapping("/keyword/{keyword}/like/{id}")
     public String likeComment(@PathVariable int id, @PathVariable String keyword, @SessionAttribute(name="user", required = false) User user) {
         try {
-            Integer uid = user == null ? null : user.getUid();
-            dao.likeComment(id, uid);
+            if (user != null) {
+                int uid = user.getUid();
+                dao.voteComment(id, uid, 1);
+            }
         } catch (Exception e) {
             logger.info("댓글 추천 중 문제 발생");
             logger.error(e.getMessage());
@@ -130,8 +132,24 @@ public class WebController {
     @GetMapping("/keyword/{keyword}/dislike/{id}")
     public String dislikeComment(@PathVariable int id, @PathVariable String keyword, @SessionAttribute(name="user", required = false) User user) {
         try {
-            Integer uid = user == null ? null : user.getUid();
-            dao.dislikeComment(id, uid);
+            if (user != null) {
+                int uid = user.getUid();
+                dao.voteComment(id, uid, -1);
+            }
+        } catch (Exception e) {
+            logger.info("댓글 비추천 중 문제 발생");
+            logger.error(e.getMessage());
+        }
+        return redirectUrl(keyword);
+    }
+
+    @GetMapping("/keyword/{keyword}/cancel_like/{id}")
+    public String cancelLikeComment(@PathVariable int id, @PathVariable String keyword, @SessionAttribute(name="user", required = false) User user) {
+        try {
+            if (user != null) {
+                int uid = user.getUid();
+                dao.voteComment(id, uid, 0);
+            }
         } catch (Exception e) {
             logger.info("댓글 비추천 중 문제 발생");
             logger.error(e.getMessage());
