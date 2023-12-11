@@ -104,7 +104,7 @@ public class DAO {
     public void addComment(String keyword, Comment c, int uid) throws Exception {
         Connection conn = open();
 
-        String sql = "INSERT INTO comments(keyword,popularity,content,owner_uid) VALUES (?,0,?,?)";
+        String sql = "INSERT INTO comments(keyword,content,owner_uid) VALUES (?,?,?)";
         PreparedStatement pstmt = conn.prepareStatement(sql);
 
         try(conn; pstmt) {

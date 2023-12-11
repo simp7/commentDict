@@ -42,12 +42,30 @@
                             <div class="button-container">
                                 추천도: ${comment.popularity}
                                 <c:if test="${sessionScope.user != null}">
-                                    <form action="/keyword/${keyword}/like/${comment.id}">
-                                        <button type="submit">추천</button>
-                                    </form>
-                                    <form action="/keyword/${keyword}/dislike/${comment.id}">
-                                        <button type="submit">비추천</button>
-                                    </form>
+                                <c:choose>
+                                    <c:when test="${comment.myVote != 1}">
+                                        <form action="/keyword/${keyword}/like/${comment.id}">
+                                            <button type="submit">추천</button>
+                                        </form>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <form action="/keyword/${keyword}/cancel_like/${comment.id}">
+                                            <button type="submit" class="selected">추천</button>
+                                        </form>
+                                    </c:otherwise>
+                                </c:choose>
+                                <c:choose>
+                                    <c:when test="${comment.myVote != -1}">
+                                        <form action="/keyword/${keyword}/dislike/${comment.id}">
+                                            <button type="submit">비추천</button>
+                                        </form>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <form action="/keyword/${keyword}/cancel_like/${comment.id}">
+                                            <button type="submit" class="selected">비추천</button>
+                                        </form>
+                                    </c:otherwise>
+                                </c:choose>
                                 </c:if>
                             </div>
                         </div>
@@ -61,12 +79,30 @@
                 <div class="button-container">
                     추천도: ${comment.popularity}
                     <c:if test="${sessionScope.user != null}">
-                        <form action="/keyword/${keyword}/like/${comment.id}">
-                            <button type="submit">추천</button>
-                        </form>
-                        <form action="/keyword/${keyword}/dislike/${comment.id}">
-                            <button type="submit">비추천</button>
-                        </form>
+                        <c:choose>
+                            <c:when test="${comment.myVote != 1}">
+                                <form action="/keyword/${keyword}/like/${comment.id}">
+                                    <button type="submit">추천</button>
+                                </form>
+                            </c:when>
+                            <c:otherwise>
+                                <form action="/keyword/${keyword}/cancel_like/${comment.id}">
+                                    <button type="submit" class="selected">추천</button>
+                                </form>
+                            </c:otherwise>
+                        </c:choose>
+                        <c:choose>
+                            <c:when test="${comment.myVote != -1}">
+                                <form action="/keyword/${keyword}/dislike/${comment.id}">
+                                    <button type="submit">비추천</button>
+                                </form>
+                            </c:when>
+                            <c:otherwise>
+                                <form action="/keyword/${keyword}/cancel_like/${comment.id}">
+                                    <button type="submit" class="selected">비추천</button>
+                                </form>
+                            </c:otherwise>
+                        </c:choose>
                     </c:if>
                 </div>
             </div>

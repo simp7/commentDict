@@ -18,3 +18,7 @@ form {
 textarea {
     resize: none;
 }
+
+.selected {
+    border: 2px solid darkslateblue;
+}
