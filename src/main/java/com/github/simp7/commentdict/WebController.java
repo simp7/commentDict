@@ -1,5 +1,6 @@
 package com.github.simp7.commentdict;
 
+import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import javax.servlet.http.HttpSession;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+
+import com.github.simp7.idl.auth.*;
 
 @Controller
 @RequestMapping("/")

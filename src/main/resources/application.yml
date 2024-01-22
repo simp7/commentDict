@@ -1,0 +1,12 @@
+spring:
+  mvc:
+    view:
+      prefix: '/views/'
+      suffix: '.jsp'
+server:
+  port: 8081
+grpc:
+  client:
+    auth:
+      address: 'static://127.0.0.1:9090'
+      negotiation-type: plaintext
